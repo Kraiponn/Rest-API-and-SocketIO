@@ -62,8 +62,12 @@ mongoose
         'mongodb://localhost:27017/messages', 
         { useNewUrlParser: true })
     .then(result => {
-        app.listen(8080);
+        const server = app.listen(8080);
         console.log('MongoDB connected successfully.');
+        const io = require('./socket').init(server);
+        io.on('connection', socket => {
+            console.log('Client connected.');
+        });
     })
     .catch(err => {
         console.log('Connected mongodb failed! ', err);
